@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<!--이부분을 추가해줘야 thymeleaf 사용이 가능하다. -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+<!--템플릿 엔진이 작동하면 text 에 있는 갑으로 p 태그 안 값이 바뀐다. -->
+<!--따라서 "기본 값" 텍스트는 보이지 않는다.-->
+<p th:text="'안녕하세요' + ${name}">기본 값</p>
+</body>
+</html>
