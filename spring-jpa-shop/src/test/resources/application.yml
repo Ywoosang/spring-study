@@ -1,0 +1,41 @@
+# 스프링 부트는 별도의 설정이 없으면 메모리모드로 돌린다.
+# application.yml 이 비어있을 경우도 메모리 모드로 실행된다.
+spring:
+  datasource:
+    # 메모리 모드로 동작한다.
+    # DB_CLOSE_DELAY=-1 : 애플리케이션이 실행되는 동안 데이터베이스가 닫히지 않도록 한다.ㅣ,ㅏ,ㅏ
+    # MODE=MySQL : MySQL 문법을 따르게 하는 옵션
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password:
+    # h2 데이터베이스 드라이버로 등록한다.
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      # 스프링부트 3.0 부터 데이터소스 초기화에 관련된 설정이다.
+      # 애플리케이션 시작 시 항상 SQL 스크립트를 실행하도록 설정한다.
+      mode: always
+
+  jpa:
+    hibernate:
+      # ddl-auto는 Hibernate의 설정 중 하나로, 데이터베이스의 스키마 관리를 자동화하는 옵션이다.
+      # none: 자동 스키마 관리를 수행하지 않는다. 데이터베이스 스키마는 사전에 수동으로 설정해야 한다.
+      # create: 애플리케이션 실행 시 기존의 데이터베이스 스키마를 삭제하고 새로운 스키마를 생성한다. 주로 새로운 환경에서 초기 데이터베이스 스키마를 설정할 때 사용된다. 실행마다 데이터베이스가 초기화되므로, 개발 초기 단계에서 유용하다.
+      # create-drop: 애플리케이션 시작 시에는 create와 같이 스키마를 생성하지만, 애플리케이션 종료 시에 생성된 스키마를 삭제한다. 주로 테스트 환경에서 유용하게 사용된다.
+      # update: 데이터베이스 스키마를 현재 애플리케이션의 엔티티 상태에 맞게 갱신한다. 즉, 스키마에 필요한 변경사항(새로운 테이블, 새로운 컬럼, 인덱스 추가 등)만 적용한다. 데이터 손실 없이 스키마를 업데이트 할 수 있어 개발 중이나 기존 데이터가 유지되어야 하는 상황에서 유용하다.
+      # validate: 애플리케이션 실행 시 데이터베이스 스키마가 현재 애플리케이션의 엔티티와 일치하는지 검증한다. 일치하지 않을 경우 오류를 발생시킨다.
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        format_sql: true
+
+
+
+logging:
+  level:
+    # logger 를 통해 하이버네이트 실행 SQL 을 남긴다.
+    org.hibernate.SQL: debug
+    # 추가로 알아보기
+    org.hibernate.type: trace
