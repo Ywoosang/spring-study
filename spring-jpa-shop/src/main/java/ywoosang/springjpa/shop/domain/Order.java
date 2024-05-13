@@ -66,4 +66,69 @@ public class Order {
     @Enumerated(EnumType.STRING)
     // 주문 상태 [ORDER, CANCEL]
     private OrderStatus status;
+
+    //
+    public void setMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
+
+
+    // 생성 메서드
+    // 주문 생성
+    // 가변인수 (Variable Arguments)
+    // 메소드가 동일한 타입의 인수를 여러개 받을 수 있도록 해준다.
+    // createOrder(member, delivery); 처럼 OrderItems 없이 호출하거나
+    // createOrder(member, delivery, orderItem1, orderItem2); 또는
+    // createOrder(member, delivery, new OrderItem[]{orderItem1, orderItem2, orderItem3}) 처럼 배열을 직접 전달할 수도 있다.
+    // 주문을 생성할때는 이 부분만 바꾸면 된다.
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+
+    /**
+     * 주문 취소
+     */
+    // 비즈니스 로직
+    public void cancel() {
+        if(delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+        // 여러 상품을 주문한 경우 각 상품에 대해서도 cancel 을 해줘야 한다.
+        // JPA 가 엔티티에 있는 데이터를 변경하면 업데이트 쿼리를 날려준다.
+        // JPA 를 사용했을 때 가장 큰 장점이다.
+        this.setStatus(OrderStatus.CANCEL);
+        for(OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    /**
+     * 전체 주문 가격 조회
+     */
+    // 조회 로직
+    public int getTotalPrice() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::getTotalPrice)
+                .sum();
+    }
 }
