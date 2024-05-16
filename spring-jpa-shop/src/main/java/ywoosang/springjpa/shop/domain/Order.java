@@ -50,11 +50,11 @@ public class Order {
     // 따라서 Order 에 foreign_key 가 위치하므로 Order 의 member 를 기준으로 잡는다.
     // 연관관계 주인이 아닌 Member 의 orders 에는 mappedBy 를 넣는다.
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     private Delivery delivery;
 
     // 예전에는 Date 를 사용하면 날짜 관련 어노테이션 매핑을 해야 했다.
@@ -67,7 +67,7 @@ public class Order {
     // 주문 상태 [ORDER, CANCEL]
     private OrderStatus status;
 
-    //
+    // 엔티티를 설정할 때는 아래처럼한다.
     public void setMember(Member member) {
         this.member = member;
         member.getOrders().add(this);
@@ -115,6 +115,7 @@ public class Order {
         }
         // 여러 상품을 주문한 경우 각 상품에 대해서도 cancel 을 해줘야 한다.
         // JPA 가 엔티티에 있는 데이터를 변경하면 업데이트 쿼리를 날려준다.
+        // db 에 update 를 하는 부분을 작성할 필요가 없다.
         // JPA 를 사용했을 때 가장 큰 장점이다.
         this.setStatus(OrderStatus.CANCEL);
         for(OrderItem orderItem : orderItems) {

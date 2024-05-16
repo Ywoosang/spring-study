@@ -2,7 +2,6 @@ package ywoosang.springjpa.shop.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ywoosang.springjpa.shop.domain.Delivery;
@@ -13,6 +12,8 @@ import ywoosang.springjpa.shop.domain.item.Item;
 import ywoosang.springjpa.shop.repository.ItemRepository;
 import ywoosang.springjpa.shop.repository.MemberRepository;
 import ywoosang.springjpa.shop.repository.OrderRepository;
+import ywoosang.springjpa.shop.repository.OrderSearch;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -78,7 +79,7 @@ public class OrderService {
 
 
     // 검색
-//    public List<Order> findOrders(OrderSearch orderSearch) {
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAll(orderSearch);
+    }
 }

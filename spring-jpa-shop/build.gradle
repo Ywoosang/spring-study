@@ -28,6 +28,9 @@ dependencies {
 	// update member_seq set next_val= 51 where next_val=1;
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// 폼 검증을 위해
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// devtool 을 이용해 캐시를 없애서 서버를 재실행 하지 않아도 리로딩 되도록 해준다.
 	implementation 'org.springframework.boot:spring-boot-devtools'
