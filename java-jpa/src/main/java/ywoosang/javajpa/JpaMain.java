@@ -16,24 +16,60 @@ public class JpaMain {
         // 트랜잭션 시작
         tx.begin();
 
-
         try {
-            Member member1 = new Member(150L,"A");
-            Member member2 = new Member(160L,"B");
+            Member member1= new Member();
+            member1.setUsername("A");
 
-            em.persist(member1);
-            em.persist(member2);
+            Member member2 = new Member();
+            member2.setUsername("B");
 
-            System.out.println(" ======================= ");
+            Member member3 = new Member();
+            member3.setUsername("C");
+
+            System.out.println("======================");
+
+            em.persist(member1); // next_val 1, 51 두 번 호출
+            em.persist(member2); // 메모리에서 시퀀스 가져옴
+            em.persist(member3); // 메모리에서 시퀀스 가져옴
+            // 이후 51번을 만나는 순간 호출
+
+            System.out.println("member1.getId() = " + member1.getId());
+            System.out.println("member3.getId() = " + member3.getId());
+            System.out.println("member2.getId() = " + member2.getId());
+
+            System.out.println("======================");
 
             tx.commit();
-        } catch (Exception e) {
+        } catch (Error e) {
             tx.rollback();
             e.printStackTrace();
         } finally {
             em.close();
         }
         emf.close();
+
+
+
+
+
+
+//        try {
+//            Member member1 = new Member(150L,"A");
+//            Member member2 = new Member(160L,"B");
+//
+//            em.persist(member1);
+//            em.persist(member2);
+//
+//            System.out.println(" ======================= ");
+//
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            em.close();
+//        }
+//        emf.close();
 
 
 
