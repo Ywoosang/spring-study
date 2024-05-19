@@ -28,6 +28,10 @@ public class Member {
     @Column(name = "name")
     private String username;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
 //    // Integer 에 가장 적절한 숫자 타입이 DB 에서 선택되어 만들어진다.
 //    private Integer age;
 //
@@ -67,7 +71,20 @@ public class Member {
         this.username = username;
     }
 
-//    public Integer getAge() {
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", team=" + team.getName() +
+                '}';
+    }
+
+    //    public Integer getAge() {
 //        return age;
 //    }
 //

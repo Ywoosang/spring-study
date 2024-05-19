@@ -1,6 +1,7 @@
 package ywoosang.javajpa;
 
 import jakarta.persistence.*;
+import java.util.*;
 
 public class JpaMain {
 
@@ -17,30 +18,51 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member1= new Member();
-            member1.setUsername("A");
+//            양방향 매핑시 가장 많이 하는 실수는 연관관계의 주인에 값을 입력하지 않는 것이다.
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            em.persist(member);
+//
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            양방향 매핑시 가장 많이 하는 실수는 연관관계의 주인에 값을 입력하지 않는 것이다.
+//            연관관계의 주인이 아닌 team 에서 member 를 추가하고 persist 하면
+//            member 의 foreign_key 인 team_id 가 업데이트되지 않는다.
+//            mysql> select * from member;
+//            +----+---------+---------+
+//            | id | team_id | name    |
+//            +----+---------+---------+
+//            |  1 |    NULL | member1 |
+//            +----+---------+---------+
+//            team.getMembers().add(member);
+//            em.persist(team);
 
-            Member member2 = new Member();
-            member2.setUsername("B");
 
-            Member member3 = new Member();
-            member3.setUsername("C");
+            // 순수한 객체관계를 고려해 작성 하려면 양쪽에 값을 다 세팅해야 한다.
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            System.out.println("======================");
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
 
-            em.persist(member1); // next_val 1, 51 두 번 호출
-            em.persist(member2); // 메모리에서 시퀀스 가져옴
-            em.persist(member3); // 메모리에서 시퀀스 가져옴
-            // 이후 51번을 만나는 순간 호출
+            em.flush();
+            em.clear();
 
-            System.out.println("member1.getId() = " + member1.getId());
-            System.out.println("member3.getId() = " + member3.getId());
-            System.out.println("member2.getId() = " + member2.getId());
+            Team findTeam = em.find(Team.class, team.getId());
 
-            System.out.println("======================");
+
+            // team.getMembers().add(member) 를 해주지 않아도 값이 들어가 있는 것을 볼 수 있다.
+            // JPA 에서 members 의 데이터를 사용하는 시점에 쿼리를 보낸다.
+            List<Member> members = findTeam.getMembers();
+            for (Member m : members) {
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
 
             tx.commit();
-        } catch (Error e) {
+        } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
         } finally {
@@ -48,9 +70,37 @@ public class JpaMain {
         }
         emf.close();
 
-
-
-
+//        try {
+//            Member member1= new Member();
+//            member1.setUsername("A");
+//
+//            Member member2 = new Member();
+//            member2.setUsername("B");
+//
+//            Member member3 = new Member();
+//            member3.setUsername("C");
+//
+//            System.out.println("======================");
+//
+//            em.persist(member1); // next_val 1, 51 두 번 호출
+//            em.persist(member2); // 메모리에서 시퀀스 가져옴
+//            em.persist(member3); // 메모리에서 시퀀스 가져옴
+//            // 이후 51번을 만나는 순간 호출
+//
+//            System.out.println("member1.getId() = " + member1.getId());
+//            System.out.println("member3.getId() = " + member3.getId());
+//            System.out.println("member2.getId() = " + member2.getId());
+//
+//            System.out.println("======================");
+//
+//            tx.commit();
+//        } catch (Error e) {
+//            tx.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            em.close();
+//        }
+//        emf.close();
 
 
 //        try {
