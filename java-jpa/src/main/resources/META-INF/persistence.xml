@@ -8,6 +8,10 @@
         <class>ywoosang.javajpa.Locker</class>
         <class>ywoosang.javajpa.MemberProduct</class>
         <class>ywoosang.javajpa.Product</class>
+        <class>ywoosang.javajpa.Item</class>
+        <class>ywoosang.javajpa.Album</class>
+        <class>ywoosang.javajpa.Movie</class>
+        <class>ywoosang.javajpa.Book</class>
         <properties>
             <!-- 필수 속성 -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

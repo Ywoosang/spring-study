@@ -15,7 +15,7 @@ import java.util.*;
         // DB 에 50개 시퀀스를 가져와 메모리에 미리 올려두고 쓰는 방식이다.
         allocationSize = 50
 )
-public class Member {
+public class Member extends  BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
     generator = "MEMBER_SEQ_GENERATOR")

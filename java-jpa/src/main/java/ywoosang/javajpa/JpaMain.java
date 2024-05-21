@@ -1,6 +1,8 @@
 package ywoosang.javajpa;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class JpaMain {
@@ -13,62 +15,100 @@ public class JpaMain {
         EntityManager em = emf.createEntityManager();
 
         EntityTransaction tx = em.getTransaction();
-
-        // 트랜잭션 시작
         tx.begin();
 
         try {
-//            양방향 매핑시 가장 많이 하는 실수는 연관관계의 주인에 값을 입력하지 않는 것이다.
-//            Member member = new Member();
-//            member.setUsername("member1");
-//            em.persist(member);
-//
-//            Team team = new Team();
-//            team.setName("TeamA");
-//            양방향 매핑시 가장 많이 하는 실수는 연관관계의 주인에 값을 입력하지 않는 것이다.
-//            연관관계의 주인이 아닌 team 에서 member 를 추가하고 persist 하면
-//            member 의 foreign_key 인 team_id 가 업데이트되지 않는다.
-//            mysql> select * from member;
-//            +----+---------+---------+
-//            | id | team_id | name    |
-//            +----+---------+---------+
-//            |  1 |    NULL | member1 |
-//            +----+---------+---------+
-//            team.getMembers().add(member);
-//            em.persist(team);
-
-
-            // 순수한 객체관계를 고려해 작성 하려면 양쪽에 값을 다 세팅해야 한다.
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setTeam(team);
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            Team findTeam = em.find(Team.class, team.getId());
-
-
-            // team.getMembers().add(member) 를 해주지 않아도 값이 들어가 있는 것을 볼 수 있다.
-            // JPA 에서 members 의 데이터를 사용하는 시점에 쿼리를 보낸다.
-            List<Member> members = findTeam.getMembers();
-            for (Member m : members) {
-                System.out.println("m.getUsername() = " + m.getUsername());
-            }
-
+            Member member = new Member() ;
+            member.setCreatedBy("우상");
+            member.setUsername("테스트사용자");
+            member.setCreatedDate(LocalDateTime.now());
             tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
+        } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
         } finally {
             em.close();
         }
         emf.close();
+
+//        try {
+//            Movie movie = new Movie();
+//            movie.setDirector("aaaa");
+//            movie.setActor("bbbb");
+//            movie.setName("이름");
+//            movie.setPrice(10000);
+//
+//            em.persist(movie);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Movie findMovie = em.find(Movie.class, movie.getId());
+//            System.out.println("findMovie = " + findMovie);
+//            tx.commit();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
+//        emf.close();
+
+
+//        트랜잭션 시작
+//        tx.begin();
+//        try {
+////
+////            Member member = new Member();
+////            member.setUsername("member1");
+////            em.persist(member);
+////
+////            Team team = new Team();
+////            team.setName("TeamA");
+////            양방향 매핑시 가장 많이 하는 실수는 연관관계의 주인에 값을 입력하지 않는 것이다.
+////            연관관계의 주인이 아닌 team 에서 member 를 추가하고 persist 하면
+////            member 의 foreign_key 인 team_id 가 업데이트되지 않는다.
+////            mysql> select * from member;
+////            +----+---------+---------+
+////            | id | team_id | name    |
+////            +----+---------+---------+
+////            |  1 |    NULL | member1 |
+////            +----+---------+---------+
+////            team.getMembers().add(member);
+////            em.persist(team);
+//
+//
+//            // 순수한 객체관계를 고려해 작성 하려면 양쪽에 값을 다 세팅해야 한다.
+//            Team team = new Team();
+//            team.setName("TeamA");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setTeam(team);
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Team findTeam = em.find(Team.class, team.getId());
+//
+//
+//            // team.getMembers().add(member) 를 해주지 않아도 값이 들어가 있는 것을 볼 수 있다.
+//            // JPA 에서 members 의 데이터를 사용하는 시점에 쿼리를 보낸다.
+//            List<Member> members = findTeam.getMembers();
+//            for (Member m : members) {
+//                System.out.println("m.getUsername() = " + m.getUsername());
+//            }
+//
+//            tx.commit();
+//        } catch (Exception e) {
+//            tx.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            em.close();
+//        }
+//        emf.close();
 
 //        try {
 //            Member member1= new Member();
