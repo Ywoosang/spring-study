@@ -2,7 +2,8 @@ package ywoosang.javajpa;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+
+import java.util.*;
 
 // @Entity 를 넣어야 JPA 가 인식한다.
 @Entity
@@ -31,6 +32,13 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @OneToOne(cascade =  CascadeType.ALL)
+    @JoinColumn(name = "locker_id")
+    private Locker locker;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 
 //    // Integer 에 가장 적절한 숫자 타입이 DB 에서 선택되어 만들어진다.
 //    private Integer age;
@@ -75,14 +83,14 @@ public class Member {
         this.team = team;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team.getName() +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Member{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", team=" + team.getName() +
+//                '}';
+//    }
 
     //    public Integer getAge() {
 //        return age;

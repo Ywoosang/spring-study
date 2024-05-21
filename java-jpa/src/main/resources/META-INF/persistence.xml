@@ -5,6 +5,9 @@
     <persistence-unit name="hello">
         <class>ywoosang.javajpa.Member</class>
         <class>ywoosang.javajpa.Team</class>
+        <class>ywoosang.javajpa.Locker</class>
+        <class>ywoosang.javajpa.MemberProduct</class>
+        <class>ywoosang.javajpa.Product</class>
         <properties>
             <!-- 필수 속성 -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
