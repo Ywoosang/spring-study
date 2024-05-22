@@ -12,6 +12,9 @@
         <class>ywoosang.javajpa.Album</class>
         <class>ywoosang.javajpa.Movie</class>
         <class>ywoosang.javajpa.Book</class>
+        <class>ywoosang.javajpa.Parent</class>
+        <class>ywoosang.javajpa.Child</class>
+
         <properties>
             <!-- 필수 속성 -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

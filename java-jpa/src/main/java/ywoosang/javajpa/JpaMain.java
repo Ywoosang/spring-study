@@ -18,10 +18,97 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member() ;
-            member.setCreatedBy("우상");
-            member.setUsername("테스트사용자");
-            member.setCreatedDate(LocalDateTime.now());
+            Parent parent = new Parent();
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildren().remove(0);
+            // child1, child2 도 persist 를 해줘야 한다.
+            // persist 를 하지 않으면 parent 만 insert 된다.
+//            insert
+//                    into
+//            Parent (name)
+//            values
+//                    (?)
+            // parent 를 persist 할 때 child 도 자동으로 persist 해주려면 cascade =ALL 로 설정하면 된다.
+//            @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+//            private List<Child> childList = new ArrayList<>();
+//            insert
+//                    into
+//            Child (name, parent_id)
+//            values
+//                    (?, ?)
+            // child 도 persist 된 것을 확인할 수 있다.
+            // Parent 를 persist 할 때 cascade 를 설정한 곳 아래 있는 childList 도 persist 시켜주는 옵션이 cascade 다.
+            // cascade 는 연쇄라는 의미다.
+
+
+
+
+
+//            em.persist(child1);
+//            em.persist(child2);
+
+//            Team team = new Team();
+//            team.setName("팀2");
+//            em.persist(team);
+//
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setTeam(team);
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<Member> members = em.createQuery("from Member", Member.class).getResultList();
+//
+//
+//
+//
+//
+
+            // em.getReference()를 통해 프록시 객체 조회
+//            Member refMember = em.getReference(Member.class, member.getId());
+//            System.out.println("refMember class: " + refMember.getClass());
+//
+//            // em.find()를 통해 실제 엔티티 조회
+//            Member findMember = em.find(Member.class, member.getId());
+//            System.out.println("findMember class: " + findMember.getClass());
+//
+//            System.out.println("refMember == findMember: " + (refMember == findMember));
+//
+//            // instanceof 비교 (성공)
+//            System.out.println("refMember instanceof Member: " + (refMember instanceof Member));
+//
+//            // equals() 비교 (성공)
+//            System.out.println("refMember.equals(findMember): " + refMember.equals(findMember));
+
+
+//            Member refMember = em.getReference(Member.class, member.getId());
+//            System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy
+//
+//            em.detach(refMember);
+//
+//            refMember.getUsername();
+            // org.hibernate.LazyInitializationException: could not initialize proxy [ywoosang.javajpa.Member#1] - no Session
+
+
+//            Member findMember = em.getReference(Member.class, member2.getId());
+//            System.out.println("findMember.getClass() = " + findMember.getClass());
+//            System.out.println("findMember.getId() = " + findMember.getId());
+//            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+
+
             tx.commit();
         } catch(Exception e) {
             e.printStackTrace();
@@ -30,6 +117,20 @@ public class JpaMain {
             em.close();
         }
         emf.close();
+
+//        try {
+//            Member member = new Member() ;
+//            member.setCreatedBy("우상");
+//            member.setUsername("테스트사용자");
+//            member.setCreatedDate(LocalDateTime.now());
+//            tx.commit();
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            tx.rollback();
+//        } finally {
+//            em.close();
+//        }
+//        emf.close();
 
 //        try {
 //            Movie movie = new Movie();
