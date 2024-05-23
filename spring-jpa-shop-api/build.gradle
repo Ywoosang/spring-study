@@ -1,0 +1,52 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'ywoosang.springjpaapi'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// 추가하면 ? 로 찍히던 파라미터가 콘솔에 값으로 나온다.
+	// 첫 번째로 원본이 출력되고 두 번째로 파라미터 바인딩이 출력된다.
+	// update member_seq set next_val= ? where next_val=?
+	// update member_seq set next_val= 51 where next_val=1;
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+	//
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// 폼 검증을 위해
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// devtool 을 이용해 캐시를 없애서 서버를 재실행 하지 않아도 리로딩 되도록 해준다.
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	// mysql 연결을 위한 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.28'
+	//
+	testImplementation 'com.h2database:h2'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+// Junit5 부터는 build.gradle 에 다음 내용을 추가해야 테스트를 인식할 수 있다.
+tasks.named('test') {
+	useJUnitPlatform()
+}
